@@ -2,17 +2,19 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define SHOW_STU 1
-#define ADD_STU  2
-#define DEL_STU  3
-#define SEAR_STU 4
-#define SAVE_STU 5
-#define QUIT_STU 6
+#define SHOW_STU   1
+#define ADD_STU    2
+#define DEL_STU    3
+#define SEAR_STU   4
+#define SAVE_STU   5
+#define UPDATE_STU 6
+#define QUIT_STU   7
 
 #define NO_ERROR  0
 #define SEX_ERROR 1
 #define AGE_ERROR 2
 #define ID_ERROR  3
+#define PK_ERROR  4
 
 typedef struct
 {
@@ -43,33 +45,53 @@ static void menu_show(void)
 	printf("3 : Delete a student by stu_id\n");
 	printf("4 : Search a student by stu_id\n");
 	printf("5 : Save all student\n");
-	printf("6 : Quit student mangement system\n");
+	printf("6 : Update a student by stu_id\n");
+	printf("7 : Quit student mangement system\n");
 	printf("***************************************************************************\n");
+}
+
+static int stu_id_constraint_primary_key(const List *p_list, const Node *node)
+{
+	int result = 0;
+	Node *p = p_list->head;
+	while (p != NULL)
+	{
+		if (p->stu_id == node->stu_id)
+		{
+			result = -1;
+			break;
+		}
+		p = p->next;
+	}
+
+	return result;
 }
 
 static int student_information_check(const List *p_list, const Node *node, Error *err)
 {
-	int repetition = stu_id_constraint
-	if ()
+	int repetition = stu_id_constraint_primary_key(p_list, node);
+	if (0 != repetition)
 	{
-
+		err->id = PK_ERROR;
+		sprintf(err->msg, "%%学生学号: %d 重复(有效学号范围:1000~9999)", node->stu_id);
+		return -1;
 	}
 	else if (9999 < node->stu_id || node->stu_id < 1000)
 	{
 		err->id = ID_ERROR;
-		strcpy(err->msg, "%%学生学号不合法(有效年龄范围:1000~9999)");
+		sprintf(err->msg, "%%学生学号: %d 不合法(有效学号范围:1000~9999)", node->stu_id);
 		return -1;
 	}
 	else if (0 != strcmp("男", node->stu_sex) && 0 != strcmp("女", node->stu_sex))
 	{
 		err->id = SEX_ERROR;
-		strcpy(err->msg, "%%学生性别不合法(有效性别:男 或 女)");
+		sprintf(err->msg, "%%学生性别: \'%s\' 不合法(有效性别: \'男\' 或 \'女\')", node->stu_sex);
 		return -1;
 	}
 	else if (50 < node->stu_age || node->stu_age <= 0)
 	{
 		err->id = AGE_ERROR;
-		strcpy(err->msg, "%%学生年龄不合法(有效年龄范围:1~50)");
+		sprintf(err->msg, "%%学生年龄: %d 不合法(有效年龄范围:1~50)", node->stu_age);
 		return -1;
 	}
 	else
@@ -137,7 +159,7 @@ Of course, the attribute has some limitation.\n");
 	printf("stu_id range 1000 to 9999.\n");
 	printf("stu_name character max (4 Chinese or 9 English).\n");
 	printf("stu_sex range 男 or 女.\n");
-	printf("stu_age range 1 to 50.\n");
+	printf("stu_age range 1 to 50.\n\n");
 	Node *p = malloc(sizeof(Node));
 	Error err;
 	memset(&err, 0, sizeof(err));
@@ -159,7 +181,13 @@ Of course, the attribute has some limitation.\n");
 		if (NO_ERROR != err.id)
 		{
 			printf("%s\n", err.msg);
-			if (ID_ERROR == err.id)
+			if (PK_ERROR == err.id)
+			{
+				printf("学生学号:");
+				scanf("%d", &(p->stu_id));
+				continue;
+			}
+			else if (ID_ERROR == err.id)
 			{
 				printf("学生学号:");
 				scanf("%d", &(p->stu_id));
@@ -281,11 +309,38 @@ static int student_information_search_by_stu_id(List *p_list, int stu_id)
 	return 0;
 }
 
+static int student_information_update(List *p_list, int stu_id, const char *stu_name)
+{
+	int result = 0;
+	Node *p = p_list->head;
+	while (p != NULL)
+	{
+		if (p->stu_id == stu_id)
+		{
+			strcpy(p->stu_name, stu_name);
+			result = 1;
+			break;
+		}
+		p = p->next;
+	}
+	if (1 == result)
+	{
+		printf("Update successful.\n");
+	}
+	else
+	{
+		printf("Update failure: %d not exist.\n", stu_id);
+	}
+
+	return 0;
+}
+
 static int function_select(int option, List *p_list)
 {
 	int stu_id = 0;
 	int result = 0;
 	char filename[300] = { 0 };
+	char stu_name[10] = {0};
 	switch (option)
 	{
 		case SHOW_STU:
@@ -309,6 +364,14 @@ static int function_select(int option, List *p_list)
 			scanf("%s", filename);
 			student_information_save(p_list, filename);
 			break;
+		case UPDATE_STU:
+			printf("Please input a student's id:");
+			scanf("%d", &stu_id);
+			printf("Please input a student's name that you want to update:");
+			scanf("%s", stu_name);
+			stu_name[9] = '\0';
+			student_information_update(p_list, stu_id, stu_name);
+			break;
 		case QUIT_STU:
 			student_mamgement_system_quit(p_list);
 			result = 1;
@@ -331,8 +394,9 @@ Loop:
 	int option = 0;
 	printf("Pick a Num:");
 	scanf("%d", &option);
-	while (option != SHOW_STU && option != ADD_STU && option != DEL_STU && 
-		option != SEAR_STU && option != QUIT_STU && option != SAVE_STU)
+	while (option != SHOW_STU && option != ADD_STU  && option != DEL_STU  && 
+		   option != SEAR_STU && option != QUIT_STU && option != SAVE_STU && 
+		   option != UPDATE_STU)
 	{
 		printf("Error: Please valid number.\n");
 		printf("Pick a Num:");

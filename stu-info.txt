@@ -1,0 +1,5 @@
+{"stu_id":1000,"stu_name":"ÏîÓğ","stu_sex":"ÄĞ","stu_age":30}
+{"stu_id":1001,"stu_name":"Óİ¼§","stu_sex":"Å®","stu_age":20}
+{"stu_id":1002,"stu_name":"Áõ°î","stu_sex":"ÄĞ","stu_age":35}
+{"stu_id":1003,"stu_name":"ÕÅÁ¼","stu_sex":"ÄĞ","stu_age":30}
+{"stu_id":1004,"stu_name":"ÏôºÎ","stu_sex":"ÄĞ","stu_age":30}
