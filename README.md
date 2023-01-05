@@ -16,7 +16,7 @@
 
 * **系统初始化时，没有任何学生数据**
 
-  ![image-20230105114132784](README.assets/image-20230105114132784.png)
+  ![image-20230105114132784](./README.assets/image-20230105114132784.png)
 
 * **添加部分学生后，可以显示所有学生信息**
 
@@ -26,37 +26,37 @@
 
 学生信息的属性有限制和约束的，在用户输入时会进行提示，输入完毕后也要进行检查
 
-![image-20230105114439523](README.assets/image-20230105114439523.png)
+![image-20230105114439523](./README.assets/image-20230105114439523.png)
 
 ### 2-3 查询一名学生信息
 
 支持通过 `学号` 来查询一名学生信息
 
-![img](README.assets/SNAGHTMLae0ae99.PNG)
+![img](./README.assets/SNAGHTMLae0ae99.PNG)
 
 ### 2-4 删一名学生信息
 
 支持通过 `学号` 来删除一名学生信息
 
-![img](README.assets/SNAGHTMLae1a00e.PNG)
+![img](./README.assets/SNAGHTMLae1a00e.PNG)
 
 验证是否真的删除成功
 
-![image-20230105120936919](README.assets/image-20230105120936919.png)
+![image-20230105120936919](./README.assets/image-20230105120936919.png)
 
 ### 2-5 保存所有学生信息
 
 支持以 `json` 格式保存所有学生信息
 
-![image-20230105121130920](README.assets/image-20230105121130920.png)
+![image-20230105121130920](./README.assets/image-20230105121130920.png)
 
 验证是否保存成功
 
-![image-20230105121238924](README.assets/image-20230105121238924.png)
+![image-20230105121238924](./README.assets/image-20230105121238924.png)
 
 ### 2-6 退出学生管理系统
 
-![image-20230105121324089](README.assets/image-20230105121324089.png)
+![image-20230105121324089](./README.assets/image-20230105121324089.png)
 
 
 
